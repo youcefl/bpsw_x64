@@ -39,9 +39,11 @@ global is_slprp
 ;           V(d.2^r) = 0 (mod n) for some r < s
 is_slprp:
     sub     rsp, 28h
+%ifndef WIN64
     mov     rcx, rdi    ; this first two lines is to make
     mov     rdx, rsi    ; it look like Windows, they have to be removed
                         ; if we are on Windows
+%endif
     mov     [rsp], rcx
     mov     [rsp + 8h], rdx
     mov     rax, rdx
