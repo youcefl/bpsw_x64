@@ -40,9 +40,8 @@ global is_slprp
 is_slprp:
     sub     rsp, 28h
 %ifndef WIN64
-    mov     rcx, rdi    ; this first two lines is to make
-    mov     rdx, rsi    ; it look like Windows, they have to be removed
-                        ; if we are on Windows
+    mov     rcx, rdi    ; this first two lines is to make it look like Windows,
+    mov     rdx, rsi    ; they have to be removed if we are on Windows
 %endif
     mov     [rsp], rcx
     mov     [rsp + 8h], rdx
@@ -67,7 +66,7 @@ div2:
     shr     r10, 1
     inc     r9
     jmp     div2
-div2_end:               ; at this point d is in r8 and s is in r9
+div2_end:                               ; at this point d is in r8 and s is in r9
 
     ; Compute U(d) mod n and V(d) mod n
 
@@ -79,28 +78,28 @@ adj_d_msbmask:
 adj_d_msbmask_end:
 
     ; initialization
-    mov     rcx, 0      ; U = U(0) = 0
-    mov     r11, 2      ; V = V(0) = 2
-    mov     qword [rsp + 18h], 1    ; q is the k-th power of Q
-loop_d_msbmask:         ; loop until r10 is 0
+    mov     rcx, 0                      ; U = U(0) = 0
+    mov     r11, 2                      ; V = V(0) = 2
+    mov     qword [rsp + 18h], 1        ; q is the k-th power of Q
+loop_d_msbmask:                         ; loop until r10 is 0
     test    r10, r10
     jz      loop_d_msbmask_end
-    mov     rax, rcx    ; compute UV
-    imul     r11
+    mov     rax, rcx                    ; compute UV
+    imul    r11
     idiv    qword [rsp]
-    mov     rcx, rdx    ; U = UV mod n
+    mov     rcx, rdx                    ; U = UV mod n
 
-    mov     rax, r11    ; compute V^2 - 2Q^k = V^2 - 2q (mod n)
-    imul     r11
-    idiv     qword [rsp]
-    mov     r11, rdx    ; r11 <- V^2 (mod n)
-    mov     rax, 2
-    imul     qword [rsp + 18h]
+    mov     rax, r11                    ; compute V^2 - 2Q^k = V^2 - 2q (mod n)
+    imul    r11
     idiv    qword [rsp]
-    sub     r11, rdx    ; r11 <- r11 - 2q (mod n)
+    mov     r11, rdx                    ; r11 <- V^2 (mod n)
+    mov     rax, 2
+    imul    qword [rsp + 18h]
+    idiv    qword [rsp]
+    sub     r11, rdx                    ; r11 <- r11 - 2q (mod n)
 
     mov     rax, qword [rsp + 18h]      ; update q for next round:
-    imul     rax
+    imul    rax
     idiv    qword [rsp]
     mov     qword [rsp + 18h], rdx      ; q <- q^2 (mod n)
 
@@ -133,7 +132,7 @@ duv_sum_is_even:
     mov     rax, qword [rsp + 18h]      ; rax <- q
     imul    qword [rsp + 10h]           ; multiply by Q
     idiv    qword [rsp]
-    mov     qword [rsp + 18h], rdx      ; q <- qword [rsp + 18h]
+    mov     qword [rsp + 18h], rdx      ; q <- Q^k (mod n)
 
 current_bit_not_set:
     shr     r10, 1
@@ -141,10 +140,34 @@ current_bit_not_set:
 
 loop_d_msbmask_end:
 
-    ; Now U(d) is in rcx and V(d) is in r11
-    test    rcx, rcx
+    ; Now U(d) is in rcx and V(d) is in r11 and Q^d is in [rsp + 18h]
+    test    rcx, rcx                    ; U(d) = 0 (mod n) => n is slprp
+    jz      is_slpsp_true
+    test    r11, r11                    ; V = 0 (mod n) => n is slprp
     jz      is_slpsp_true
 
+    dec     r9                          ; Loop for i in {1, ..., s-1}
+.loop_on_s:
+    test    r9, r9
+    jz      .loop_on_s_end
+    mov     rax, r11                    ; begin V <- V^2 - 2q (mod n)
+    imul    rax
+    div     qword [rsp]
+    mov     rax, rdx
+    sub     rax, [rsp + 18h]
+    sub     rax, [rsp + 18h]            ; @todo: overflow !
+    xor     rdx, rdx
+    idiv    qword [rsp]
+    test    rdx, rdx                    ; test rdx before moving it to r11
+    jz      is_slpsp_true
+    mov     r11, rdx                    ; end V <- V^2 - 2q (mod n)
+    mov     rax, [rsp + 18h]            ; begin q <- q^2 (mod n)
+    imul    rax
+    div     qword [rsp]
+    mov     [rsp + 18h], rdx            ; end q <- q^2 (mod n)
+    dec     r9
+    jmp     .loop_on_s
+.loop_on_s_end:
     xor     rax, rax
     jmp     is_slpsp_end
 
