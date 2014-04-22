@@ -26,6 +26,26 @@ build_slprp_tests()
     testsVec.push_back(std::make_pair(uint64(10877), int64(5)));
     testsVec.push_back(std::make_pair(uint64(16109), int64(13)));
     testsVec.push_back(std::make_pair(uint64(18971), int64(-11)));
+    testsVec.push_back(std::make_pair(uint64(22499), int64(-15)));
+    testsVec.push_back(std::make_pair(uint64(24569), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(25199), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(40309), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(58519), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(75077), int64(5)));
+    testsVec.push_back(std::make_pair(uint64(97439), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(100127), int64(5)));
+    testsVec.push_back(std::make_pair(uint64(113573), int64(5)));
+    testsVec.push_back(std::make_pair(uint64(115639), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(130139), int64(-15)));
+    testsVec.push_back(std::make_pair(uint64(155819), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(158399), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(161027), int64(5)));
+    testsVec.push_back(std::make_pair(uint64(162133), int64(5)));
+    testsVec.push_back(std::make_pair(uint64(176399), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(176471), int64(-15)));
+    testsVec.push_back(std::make_pair(uint64(189419), int64(-7)));
+    testsVec.push_back(std::make_pair(uint64(192509), int64(13)));
+    testsVec.push_back(std::make_pair(uint64(197801), int64(-11)));
     return testsVec;
 }
 
