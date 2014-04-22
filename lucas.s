@@ -39,7 +39,7 @@ global is_slprp
 ;           V(d.2^r) = 0 (mod n) for some r < s
 is_slprp:
     sub     rsp, 28h
-    mov     rcx, rdi    ; this first two lines is to make 
+    mov     rcx, rdi    ; this first two lines is to make
     mov     rdx, rsi    ; it look like Windows, they have to be removed
                         ; if we are on Windows
     mov     [rsp], rcx
@@ -49,7 +49,7 @@ is_slprp:
     add     rax, 1
     sar     rax, 2      ; after that Q is in rax
     mov     [rsp + 10h], rax
-    
+
     ; Factor n + 1 into d.2^s, d in r8 and s in r9
     mov     r10, 8000000000000000h
     mov     r8, rcx     ; initialize d = n + 1
@@ -87,7 +87,7 @@ loop_d_msbmask:         ; loop until r10 is 0
     imul     r11
     idiv    qword [rsp]
     mov     rcx, rdx    ; U = UV mod n
-    
+
     mov     rax, r11    ; compute V^2 - 2Q^k = V^2 - 2q (mod n)
     imul     r11
     idiv     qword [rsp]
@@ -96,15 +96,15 @@ loop_d_msbmask:         ; loop until r10 is 0
     imul     qword [rsp + 18h]
     idiv    qword [rsp]
     sub     r11, rdx    ; r11 <- r11 - 2q (mod n)
-    
-    mov     rax, qword [rsp + 18h]      ; update q for next round: 
+
+    mov     rax, qword [rsp + 18h]      ; update q for next round:
     imul     rax
     idiv    qword [rsp]
     mov     qword [rsp + 18h], rdx      ; q <- q^2 (mod n)
-    
+
     test    r10, r8
     jz      current_bit_not_set
-    
+
     ; U(2k+1) = (U(2k) + V(2k)) / 2
     mov     rax, rcx
     add     rax, r11                    ; @todo: what about possible overflow ?
@@ -115,7 +115,7 @@ uv_sum_is_even:
     sar     rax, 1
     mov     qword [rsp + 20h], rax      ; backup U(2k+1), we still need U(2k)
 
-    ; V(2k+1) = (D.U(2k) + V(2k)) / 2 
+    ; V(2k+1) = (D.U(2k) + V(2k)) / 2
     mov     rax, rcx                    ; rax <- U(2k)
     imul    qword [rsp + 8h]            ; rax <- U(2k) * D
     add     rax, r11                    ; @todo: what about possible overflow ?
@@ -133,12 +133,12 @@ duv_sum_is_even:
     idiv    qword [rsp]
     mov     qword [rsp + 18h], rdx      ; q <- qword [rsp + 18h]
 
-current_bit_not_set:    
+current_bit_not_set:
     shr     r10, 1
     jmp     loop_d_msbmask
 
 loop_d_msbmask_end:
-    
+
     ; Now U(d) is in rcx and V(d) is in r11
     test    rcx, rcx
     jz      is_slpsp_true
