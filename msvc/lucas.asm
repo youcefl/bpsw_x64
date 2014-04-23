@@ -5,15 +5,13 @@
 ; ------------------------------------------------------------------------------------------------
 
 ; ------------------------------------------------------------------------------------------------
-bits 64
-default rel
 ; ------------------------------------------------------------------------------------------------
 
 ; ------------------------------------------------------------------------------------------------
-SECTION .code
+.code
 ; ------------------------------------------------------------------------------------------------
 
-global is_slprp
+is_slprp proc
 
 ; ------------------------------------------------------------------------------------------------
 ; We assume that n is odd > 1 and that Q = (1 - D)/4
@@ -37,33 +35,32 @@ global is_slprp
 ;       n is slprp if and only if one of the following conditions holds:
 ;           U(d) = 0 (mod n)
 ;           V(d.2^r) = 0 (mod n) for some r < s
-is_slprp:
     sub     rsp, 40h
-%ifndef WIN64
-    mov     rcx, rdi    ; this first two lines is to make it look like Windows,
-    mov     rdx, rsi    ; they have to be removed if we are on Windows
-%endif
-    mov     qword [rsp + 28h], 2h   ; Constant 2 used for division below (still don't know how to divide rdx:rax by 2)
-    mov     [rsp], rcx
-    mov     [rsp + 8h], rdx
+;%ifndef WIN64
+;    mov     rcx, rdi    ; this first two lines is to make it look like Windows,
+;    mov     rdx, rsi    ; they have to be removed if we are on Windows
+;%endif
+    mov     qword ptr [rsp + 28h], 2h   ; Constant 2 used for division below (still don't know how to divide rdx:rax by 2)
+    mov     qword ptr [rsp], rcx
+    mov     qword ptr [rsp + 8h], rdx
     mov     rax, rdx
     neg     rax
     add     rax, 1
-    sar     rax, 2      ; after that Q is in rax
-    ; Since we are working modulo n here we can make Q positive by adding n
+    sar     rax, 2						; after that Q is in rax
+	; Since we are working modulo n here we can make Q positive by adding n
     ; (we assume that |Q| < n).
-    test    rax, rax
-    jns     q_is_not_negative
-    add     rax, rcx
+	test	rax, rax
+	jns		q_is_not_negative
+	add		rax, rcx
 q_is_not_negative:
-    mov     [rsp + 10h], rax    ; rsp + 10h <- Q
+    mov     qword ptr [rsp + 10h], rax			; rsp + 10h <- Q
 
     ; Same for D: if D is < 0 then D <- D + n.
-    test    rdx, rdx
-    jns     D_is_not_negative
-    add     rdx, rcx
+	test	rdx, rdx
+	jns		D_is_not_negative
+	add		rdx, rcx
 D_is_not_negative:
-    mov     qword [rsp + 8h], rdx       ; rsp + 8h <- D
+    mov     qword ptr [rsp + 8h], rdx		    ; rsp + 8h <- D
 
 
     ; Factor n + 1 into d.2^s, d in r8 and s in r9
@@ -95,51 +92,51 @@ adj_d_msbmask_end:
     ; initialization
     mov     rcx, 0                      ; U = U(0) = 0
     mov     r11, 2                      ; V = V(0) = 2
-    mov     qword [rsp + 18h], 1        ; q is the k-th power of Q
+    mov     qword ptr [rsp + 18h], 1    ; q is the k-th power of Q
 loop_d_msbmask:                         ; loop until r10 is 0
     test    r10, r10
     jz      loop_d_msbmask_end
     mov     rax, rcx                    ; compute UV
     mul     r11
-    div     qword [rsp]
+    div     qword ptr [rsp]
     mov     rcx, rdx                    ; U = UV mod n
 
     mov     rax, r11                    ; compute V^2 - 2Q^k = V^2 - 2q (mod n)
-    mul     r11
-    div     qword [rsp]
+    mul		r11
+    div     qword ptr [rsp]
     mov     r11, rdx                    ; r11 <- V^2 (mod n)
 
-    cmp     r11, qword [rsp + 18h]      ; if (V^2 < q) then V^2 - q would be negative
-    jb      v2_b_q
-    jae     v2_ae_q
+	cmp		r11, qword ptr [rsp + 18h]	; if (V^2 < q) then V^2 - q would be negative
+	jb		v2_b_q
+	jae		v2_ae_q
 v2_b_q:
-    mov     rdx, qword [rsp + 18h]
-    sub     rdx, r11
-    mov     r11, qword [rsp]
-    sub     r11, rdx
-    jmp     after_v2_ae_q
+	mov		rdx, qword ptr [rsp + 18h]
+	sub		rdx, r11
+	mov		r11, qword ptr [rsp]
+	sub		r11, rdx
+	jmp		after_v2_ae_q
 v2_ae_q:
-    sub     r11, qword [rsp + 18h]
+	sub		r11, qword ptr [rsp + 18h]
 after_v2_ae_q:
 
-    cmp     r11, qword [rsp + 18h]      ; if (V^2 - q < q) then V^2 - 2q would be negative
-    jb      v2mq_b_q
-    jae     v2mq_ae_q
+	cmp		r11, qword ptr [rsp + 18h]	; if (V^2 - q < q) then V^2 - 2q would be negative
+	jb		v2mq_b_q
+	jae		v2mq_ae_q
 v2mq_b_q:
-    mov     rdx, qword [rsp + 18h]
-    sub     rdx, r11
-    mov     r11, qword [rsp]
-    sub     r11, rdx
-    jmp     after_v2mq_ae_q
+	mov		rdx, qword ptr [rsp + 18h]
+	sub		rdx, r11
+	mov		r11, qword ptr [rsp]
+	sub		r11, rdx
+	jmp		after_v2mq_ae_q
 v2mq_ae_q:
-    sub     r11, qword [rsp + 18h]
-after_v2mq_ae_q:                        ; now r11 contains V^2 - 2q (mod n)
+	sub		r11, qword ptr [rsp + 18h]
+after_v2mq_ae_q:						; now r11 contains V^2 - 2q (mod n)
 
 
-    mov     rax, qword [rsp + 18h]      ; update q for next round:
-    mul     rax
-    div     qword [rsp]
-    mov     qword [rsp + 18h], rdx      ; q <- q^2 (mod n)
+    mov     rax, qword ptr [rsp + 18h]  ; update q for next round:
+    mul		rax
+    div		qword ptr [rsp]
+    mov     qword ptr [rsp + 18h], rdx  ; q <- q^2 (mod n)
 
     test    r10, r8
     jz      current_bit_not_set
@@ -149,44 +146,47 @@ after_v2mq_ae_q:                        ; now r11 contains V^2 - 2q (mod n)
     xor     rdx, rdx
     add     rax, r11
     adc     rdx, rdx
-    div     qword [rsp]
+    div     qword ptr [rsp]
     mov     rax, rdx
     xor     rdx, rdx
     test    rax, 1
     jz      uv_sum_is_even
-    add     rax, qword [rsp]
+    add     rax, qword ptr [rsp]        ; @todo: what about possible overflow ?
     adc     rdx, rdx
 uv_sum_is_even:
-    div     qword [rsp + 28h]
-    div     qword [rsp]
-    mov     qword [rsp + 20h], rdx      ; backup U(2k+1), we still need U(2k)
+;    shr     rax, 1
+;    shr     rdx, 1
+    div     qword ptr [rsp + 28h]
+	div		qword ptr [rsp]
+    mov     qword ptr [rsp + 20h], rdx  ; backup U(2k+1), we still need U(2k)
 
     ; V(2k+1) = (D.U(2k) + V(2k)) / 2
     mov     rax, rcx                    ; rax <- U(2k)
-    mul     qword [rsp + 8h]            ; rax <- U(2k) * D
-    div     qword [rsp]
+    mul     qword ptr [rsp + 8h]        ; rax <- U(2k) * D
+    div     qword ptr [rsp]
     mov     rax, rdx
     xor     rdx, rdx
     add     rax, r11
     adc     rdx, rdx
-    div     qword [rsp]
+    div     qword ptr [rsp]
     mov     rax, rdx
     xor     rdx, rdx
     test    rax, 1
     jz      duv_sum_is_even
-    add     rax, qword [rsp]
+    add     rax, qword ptr [rsp]        ; @todo: what about possible overflow ?
     adc     rdx, rdx
 duv_sum_is_even:
-    div     qword [rsp + 28h]           ; rax <- rax / 2
-    div     qword [rsp]
+    div     qword ptr [rsp + 28h]
+;    shr     rax, 1                      ; rax <- rax / 2
+	div		qword ptr [rsp]
     mov     r11, rdx                    ; r11 <- V(2k+1)
-    mov     rcx, qword [rsp + 20h]      ; rcx <- U(2k+1)
+    mov     rcx, qword ptr [rsp + 20h]  ; rcx <- U(2k+1)
 
     ; q <- q * Q (mod n)
-    mov     rax, qword [rsp + 18h]      ; rax <- q
-    mul     qword [rsp + 10h]           ; multiply by Q
-    div     qword [rsp]
-    mov     qword [rsp + 18h], rdx      ; q <- Q^k (mod n)
+    mov     rax, qword ptr [rsp + 18h]  ; rax <- q
+    mul     qword ptr [rsp + 10h]       ; multiply by Q
+    div     qword ptr [rsp]
+    mov     qword ptr [rsp + 18h], rdx  ; q <- Q^k (mod n)
 
 current_bit_not_set:
     shr     r10, 1
@@ -205,39 +205,39 @@ loop_on_s:
     test    r9, r9
     jz      loop_on_s_end
     mov     rax, r11                    ; *begin* V <- V^2 - 2q (mod n)
-    mul     rax                         ; rdx:rax <- V^2
-    div     qword [rsp]
-    mov     rax, rdx                    ; rax <- V^2 (mod n)
+    mul		rax							; rdx:rax <- V^2
+    div     qword ptr [rsp]
+    mov     rax, rdx					; rax <- V^2 (mod n)
 
-    ; subtract q from V^2 twice avoiding negative values
-    cmp     rax, [rsp + 18h]
-    jb      v2_less_than_q
-    sub     rax, [rsp + 18h]
-    jmp     after_v2_less_than_q
+	; subtract q from V^2 twice avoiding negative values
+	cmp		rax, [rsp + 18h]
+	jb		v2_less_than_q
+	sub		rax, [rsp + 18h]
+	jmp		after_v2_less_than_q
 v2_less_than_q:
-    mov     rdx, [rsp + 18h]            ; rdx <- q
-    sub     rdx, rax                    ; rdx <- rdx - V^2
-    mov     rax, qword [rsp]            ; rax <- n
-    sub     rax, rdx                    ; rax <- rax - rdx = n - ( q - V^2 )
+	mov		rdx, [rsp + 18h]			; rdx <- q
+	sub		rdx, rax					; rdx <- rdx - V^2
+	mov		rax, qword ptr [rsp]		; rax <- n
+	sub		rax, rdx					; rax <- rax - rdx = n - ( q - V^2 )
 after_v2_less_than_q:
-    cmp     rax, [rsp + 18h]            ; compare V^2 - q and q
-    jb      v2mq_less_than_q
-    sub     rax, [rsp + 18h]            ; rax <- rax - q
-    jmp     after_v2mq_less_than_q
+	cmp		rax, [rsp + 18h]			; compare V^2 - q and q
+	jb		v2mq_less_than_q
+	sub		rax, [rsp + 18h]			; rax <- rax - q
+	jmp		after_v2mq_less_than_q
 v2mq_less_than_q:
-    mov     rdx, [rsp + 18h]            ; rdx <- q
-    sub     rdx, rax                    ; rdx <- rdx - V^2
-    mov     rax, qword [rsp]            ; rax <- n
-    sub     rax, rdx                    ; rax <- rax - rdx = n - ( q - V^2 )
+	mov		rdx, [rsp + 18h]			; rdx <- q
+	sub		rdx, rax					; rdx <- rdx - V^2
+	mov		rax, qword ptr [rsp]		; rax <- n
+	sub		rax, rdx					; rax <- rax - rdx = n - ( q - V^2 )
 after_v2mq_less_than_q:
-    
+	
     test    rax, rax                    ; test rdx before moving it to r11
     jz      is_slpsp_true
     mov     r11, rax                    ; *end* V <- V^2 - 2q (mod n)
 
     mov     rax, [rsp + 18h]            ; *begin* q <- q^2 (mod n)
     mul     rax
-    div     qword [rsp]
+    div     qword ptr [rsp]
     mov     [rsp + 18h], rdx            ; *end* q <- q^2 (mod n)
 
     dec     r9
@@ -252,5 +252,9 @@ is_slpsp_true:
 is_slpsp_end:
     add     rsp, 40h
     ret
+
+is_slprp endp
+
+end
 
 

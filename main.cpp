@@ -91,6 +91,8 @@ build_slprp_tests()
     add_slprp_test(testsVec, uint64(2305843009213693951), int64(17), true);
     add_slprp_test(testsVec, uint64(2305843009213693967), int64(5), true);
     add_slprp_test(testsVec, uint64(9000000000000000041), int64(-11), true);
+    add_slprp_test(testsVec, uint64(10000000000000000051), int64(-7), true);
+    add_slprp_test(testsVec, uint64(17000000000000000003), int64(5), true);
     // End Prime values of n
 
     // Begin Composite values of n
@@ -105,6 +107,8 @@ build_slprp_tests()
     add_slprp_test(testsVec, uint64(576460752303423629), int64(-7), false);
     add_slprp_test(testsVec, uint64(576460752303423641), int64(-7), false);
     add_slprp_test(testsVec, uint64(576460752303423643), int64(5), false);
+    add_slprp_test(testsVec, uint64(17000000000000000023), int64(5), false);
+    // add_slprp_test(testsVec, uint64(-1) - 32, int64(5), false);
     // End Composite values of n
 
 
