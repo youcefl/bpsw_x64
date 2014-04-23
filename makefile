@@ -1,7 +1,7 @@
 
 
-CC = g++ -std=c++0x -g
-NASM_FLAGS = -D WIN64 -g -f win64
+CC = g++ -std=c++0x -Ofast
+NASM_FLAGS = -D WIN64 -f win64
 
 
 all: asm

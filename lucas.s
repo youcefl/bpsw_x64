@@ -165,6 +165,8 @@ uv_sum_is_even:
     ; V(2k+1) = (D.U(2k) + V(2k)) / 2
     mov     rax, rcx                    ; rax <- U(2k)
     mul     qword [rsp + 8h]            ; rax <- U(2k) * D
+    div     qword [rsp]
+    mov     rax, rdx
     add     rax, r11                    ; @todo: what about possible overflow ?
     test    rax, 1
     jz      duv_sum_is_even

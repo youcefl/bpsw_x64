@@ -3,7 +3,9 @@
 * Creator: Youcef Lemsafer
 * Authors: Youcef Lemsafer
 */
+#include <string.h>
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 typedef long long int64;
@@ -78,6 +80,17 @@ build_slprp_tests()
     add_slprp_test(testsVec, uint64(1099511627803), int64(5), true);
     add_slprp_test(testsVec, uint64(1099511627831), int64(13), true);
     add_slprp_test(testsVec, uint64(9007199254740997), int64(5), true);
+    add_slprp_test(testsVec, uint64(576460752303423619), int64(13), true);
+    add_slprp_test(testsVec, uint64(576460752303423649), int64(-11), true);
+    add_slprp_test(testsVec, uint64(576460752303423733), int64(5), true);
+    add_slprp_test(testsVec, uint64(576460752303423737), int64(5), true);
+    add_slprp_test(testsVec, uint64(576460752303423749), int64(-7), true);
+    add_slprp_test(testsVec, uint64(576460752303423761), int64(13), true);
+    add_slprp_test(testsVec, uint64(700000000000000289), int64(-11), true);
+    add_slprp_test(testsVec, uint64(2305843009213693921), int64(-7), true);
+    add_slprp_test(testsVec, uint64(2305843009213693951), int64(17), true);
+    add_slprp_test(testsVec, uint64(2305843009213693967), int64(5), true);
+    add_slprp_test(testsVec, uint64(9000000000000000041), int64(-11), true);
     // End Prime values of n
 
     // Begin Composite values of n
@@ -88,6 +101,10 @@ build_slprp_tests()
     add_slprp_test(testsVec, uint64(1099511627801), int64(-7), false);
     add_slprp_test(testsVec, uint64(1099511627813), int64(5), false);
     add_slprp_test(testsVec, uint64(9007199254741003), int64(5), false);
+    add_slprp_test(testsVec, uint64(576460752303423623), int64(5), false);
+    add_slprp_test(testsVec, uint64(576460752303423629), int64(-7), false);
+    add_slprp_test(testsVec, uint64(576460752303423641), int64(-7), false);
+    add_slprp_test(testsVec, uint64(576460752303423643), int64(5), false);
     // End Composite values of n
 
 
@@ -104,18 +121,28 @@ run_slprp_tests()
         auto const D = tst.first.second;
         auto const expected = tst.second;
         auto const actual = is_slprp(n, D);
-        std::cout << "is_slprp(" << n << ", " << D << ") = " 
-            << actual;
-        if( expected != actual ) {
-            std::cout << "      FAIL (Expected: " << expected << ", Actual:" << actual << ")" << std::endl;
-        } else {
-            std::cout << "      OK" << std::endl;
+        std::ostringstream testRes;
+        testRes << "is_slprp(" << n << ", " << D << ") = " << actual;
+        for(auto i(testRes.str().size() + 1); i < 59; ++i) {
+            testRes << " ";
         }
+        if( expected != actual ) {
+            testRes << " FAIL (Expected: " << expected << ", Actual:" << actual << ")" << std::endl;
+        } else {
+            testRes << " OK" << std::endl;
+        }
+        std::cout << testRes.str();
     }
 }
 
+
+
 int main(int argc, char** argv)
 {
-    run_slprp_tests();
+    if( argc == 2 ) {
+        if( !strcmp(argv[1], "-t") ) {
+            run_slprp_tests();
+        }
+    }
 }
 
