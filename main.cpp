@@ -36,79 +36,93 @@ build_slprp_tests()
     // I used Wolfram alpha to find the second parameter:
     // e.g. JacobiSymbol[D, 324899] where D in {5, -7, 9, -11, 13, -15}
     // yields {1, 1, 1, 1, 1, -1} hence D = -15
-    add_slprp_test(testsVec, uint64(5459),   int64(-7),  true);
-    add_slprp_test(testsVec, uint64(5777),   int64(5),   true);
-    add_slprp_test(testsVec, uint64(10877),  int64(5),   true);
-    add_slprp_test(testsVec, uint64(16109),  int64(13),  true);
-    add_slprp_test(testsVec, uint64(18971),  int64(-11), true);
-    add_slprp_test(testsVec, uint64(22499),  int64(-15), true);
-    add_slprp_test(testsVec, uint64(24569),  int64(-7),  true);
-    add_slprp_test(testsVec, uint64(25199),  int64(-7),  true);
-    add_slprp_test(testsVec, uint64(40309),  int64(-7),  true);
-    add_slprp_test(testsVec, uint64(58519),  int64(-7),  true);
-    add_slprp_test(testsVec, uint64(75077),  int64(5),   true);
-    add_slprp_test(testsVec, uint64(97439),  int64(-7),  true);
-    add_slprp_test(testsVec, uint64(100127), int64(5),   true);
-    add_slprp_test(testsVec, uint64(113573), int64(5),   true);
-    add_slprp_test(testsVec, uint64(115639), int64(-7),  true);
-    add_slprp_test(testsVec, uint64(130139), int64(-15), true);
-    add_slprp_test(testsVec, uint64(155819), int64(-7),  true);
-    add_slprp_test(testsVec, uint64(158399), int64(-7),  true);
-    add_slprp_test(testsVec, uint64(161027), int64(5),   true);
-    add_slprp_test(testsVec, uint64(162133), int64(5),   true);
-    add_slprp_test(testsVec, uint64(176399), int64(-7),  true);
-    add_slprp_test(testsVec, uint64(176471), int64(-15), true);
-    add_slprp_test(testsVec, uint64(189419), int64(-7),  true);
-    add_slprp_test(testsVec, uint64(192509), int64(13),  true);
-    add_slprp_test(testsVec, uint64(197801), int64(-11), true);
-    add_slprp_test(testsVec, uint64(224369), int64(-7),  true);
-    add_slprp_test(testsVec, uint64(230691), int64(-7),  true);
-    add_slprp_test(testsVec, uint64(231703), int64(5),   true);
-    add_slprp_test(testsVec, uint64(243629), int64(-15), true);
-    add_slprp_test(testsVec, uint64(253259), int64(-7),  true);
-    add_slprp_test(testsVec, uint64(268349), int64(-15), true);
-    add_slprp_test(testsVec, uint64(288919), int64(13),  true);
-    add_slprp_test(testsVec, uint64(313499), int64(-11), true);
-    add_slprp_test(testsVec, uint64(324899), int64(-15), true);
+    add_slprp_test(testsVec, 5459ULL,   -7LL,  true);
+    add_slprp_test(testsVec, 5777ULL,   5LL,   true);
+    add_slprp_test(testsVec, 10877ULL,  5LL,   true);
+    add_slprp_test(testsVec, 16109ULL,  13LL,  true);
+    add_slprp_test(testsVec, 18971ULL,  -11LL, true);
+    add_slprp_test(testsVec, 22499ULL,  -15LL, true);
+    add_slprp_test(testsVec, 24569ULL,  -7LL,  true);
+    add_slprp_test(testsVec, 25199ULL,  -7LL,  true);
+    add_slprp_test(testsVec, 40309ULL,  -7LL,  true);
+    add_slprp_test(testsVec, 58519ULL,  -7LL,  true);
+    add_slprp_test(testsVec, 75077ULL,  5LL,   true);
+    add_slprp_test(testsVec, 97439ULL,  -7LL,  true);
+    add_slprp_test(testsVec, 100127ULL, 5LL,   true);
+    add_slprp_test(testsVec, 113573ULL, 5LL,   true);
+    add_slprp_test(testsVec, 115639ULL, -7LL,  true);
+    add_slprp_test(testsVec, 130139ULL, -15LL, true);
+    add_slprp_test(testsVec, 155819ULL, -7LL,  true);
+    add_slprp_test(testsVec, 158399ULL, -7LL,  true);
+    add_slprp_test(testsVec, 161027ULL, 5LL,   true);
+    add_slprp_test(testsVec, 162133ULL, 5LL,   true);
+    add_slprp_test(testsVec, 176399ULL, -7LL,  true);
+    add_slprp_test(testsVec, 176471ULL, -15LL, true);
+    add_slprp_test(testsVec, 189419ULL, -7LL,  true);
+    add_slprp_test(testsVec, 192509ULL, 13LL,  true);
+    add_slprp_test(testsVec, 197801ULL, -11LL, true);
+    add_slprp_test(testsVec, 224369ULL, -7LL,  true);
+    add_slprp_test(testsVec, 230691ULL, -7LL,  true);
+    add_slprp_test(testsVec, 231703ULL, 5LL,   true);
+    add_slprp_test(testsVec, 243629ULL, -15LL, true);
+    add_slprp_test(testsVec, 253259ULL, -7LL,  true);
+    add_slprp_test(testsVec, 268349ULL, -15LL, true);
+    add_slprp_test(testsVec, 288919ULL, 13LL,  true);
+    add_slprp_test(testsVec, 313499ULL, -11LL, true);
+    add_slprp_test(testsVec, 324899ULL, -15LL, true);
     // End of values taken from A217255
 
     // Begin Prime values of n
-    add_slprp_test(testsVec, uint64(4294967311), int64(-7), true);
-    add_slprp_test(testsVec, uint64(4294967357), int64(5), true);
-    add_slprp_test(testsVec, uint64(4294967371), int64(-11), true);
-    add_slprp_test(testsVec, uint64(1099511627791), int64(-7), true);
-    add_slprp_test(testsVec, uint64(1099511627803), int64(5), true);
-    add_slprp_test(testsVec, uint64(1099511627831), int64(13), true);
-    add_slprp_test(testsVec, uint64(9007199254740997), int64(5), true);
-    add_slprp_test(testsVec, uint64(576460752303423619), int64(13), true);
-    add_slprp_test(testsVec, uint64(576460752303423649), int64(-11), true);
-    add_slprp_test(testsVec, uint64(576460752303423733), int64(5), true);
-    add_slprp_test(testsVec, uint64(576460752303423737), int64(5), true);
-    add_slprp_test(testsVec, uint64(576460752303423749), int64(-7), true);
-    add_slprp_test(testsVec, uint64(576460752303423761), int64(13), true);
-    add_slprp_test(testsVec, uint64(700000000000000289), int64(-11), true);
-    add_slprp_test(testsVec, uint64(2305843009213693921), int64(-7), true);
-    add_slprp_test(testsVec, uint64(2305843009213693951), int64(17), true);
-    add_slprp_test(testsVec, uint64(2305843009213693967), int64(5), true);
-    add_slprp_test(testsVec, uint64(9000000000000000041), int64(-11), true);
-    add_slprp_test(testsVec, uint64(10000000000000000051), int64(-7), true);
-    add_slprp_test(testsVec, uint64(17000000000000000003), int64(5), true);
+    add_slprp_test(testsVec, 4294967311ULL, -7LL, true);
+    add_slprp_test(testsVec, 4294967357ULL, 5LL, true);
+    add_slprp_test(testsVec, 4294967371ULL, -11LL, true);
+    add_slprp_test(testsVec, 263456789093ULL, 5LL, true);
+    add_slprp_test(testsVec, 1099511627791ULL, -7LL, true);
+    add_slprp_test(testsVec, 1099511627803ULL, 5LL, true);
+    add_slprp_test(testsVec, 1099511627831ULL, 13LL, true);
+    add_slprp_test(testsVec, 9007199254740997ULL, 5LL, true);
+    add_slprp_test(testsVec, 576460752303423619ULL, 13LL, true);
+    add_slprp_test(testsVec, 576460752303423649ULL, -11LL, true);
+    add_slprp_test(testsVec, 576460752303423733ULL, 5LL, true);
+    add_slprp_test(testsVec, 576460752303423737ULL, 5LL, true);
+    add_slprp_test(testsVec, 576460752303423749ULL, -7LL, true);
+    add_slprp_test(testsVec, 576460752303423761ULL, 13LL, true);
+    add_slprp_test(testsVec, 700000000000000289ULL, -11LL, true);
+    add_slprp_test(testsVec, 2305843009213693921ULL, -7LL, true);
+    add_slprp_test(testsVec, 2305843009213693951ULL, 17LL, true);
+    add_slprp_test(testsVec, 2305843009213693967ULL, 5LL, true);
+    add_slprp_test(testsVec, 9000000000000000041ULL, -11LL, true);
+    add_slprp_test(testsVec, 10000000000000000051ULL, -7LL, true);
+    add_slprp_test(testsVec, 12345678901234567891ULL, -11L, true);
+    add_slprp_test(testsVec, 17000000000000000003ULL, 5LL, true);
+    add_slprp_test(testsVec, uint64(-1) - 58, int64(5), true);
     // End Prime values of n
 
     // Begin Composite values of n
     // 2047 = 23*89 is a strong pseudo prime base 2
-    add_slprp_test(testsVec, uint64(2047),       int64(5),  false);
-    add_slprp_test(testsVec, uint64(4294967333), int64(5),  false);
-    add_slprp_test(testsVec, uint64(4294967359), int64(13), false);
-    add_slprp_test(testsVec, uint64(1099511627801), int64(-7), false);
-    add_slprp_test(testsVec, uint64(1099511627813), int64(5), false);
-    add_slprp_test(testsVec, uint64(9007199254741003), int64(5), false);
-    add_slprp_test(testsVec, uint64(576460752303423623), int64(5), false);
-    add_slprp_test(testsVec, uint64(576460752303423629), int64(-7), false);
-    add_slprp_test(testsVec, uint64(576460752303423641), int64(-7), false);
-    add_slprp_test(testsVec, uint64(576460752303423643), int64(5), false);
-    add_slprp_test(testsVec, uint64(17000000000000000023), int64(5), false);
-    // add_slprp_test(testsVec, uint64(-1) - 32, int64(5), false);
+    add_slprp_test(testsVec, 2047ULL,       5LL,  false);
+    add_slprp_test(testsVec, 4294967333ULL, 5LL,  false);
+    add_slprp_test(testsVec, 4294967359ULL, 13LL, false);
+    add_slprp_test(testsVec, 27300250277ULL, 5LL, true);   /* SLPSP 116833x233669 */
+    add_slprp_test(testsVec, 27300250279ULL, -23LL, false);
+    add_slprp_test(testsVec, 263456789039ULL, -7LL, false);
+    add_slprp_test(testsVec, 263456789041ULL, -7LL, false);
+    add_slprp_test(testsVec, 263456789047ULL, 5LL, false);
+    add_slprp_test(testsVec, 263456789051ULL, -15LL, false);
+    add_slprp_test(testsVec, 263456789081ULL, -7LL, false);
+    add_slprp_test(testsVec, 263456789119ULL, -7LL, false);
+    add_slprp_test(testsVec, 263456789129ULL, -11LL, false);
+    add_slprp_test(testsVec, 1099511627801ULL, -7LL, false);
+    add_slprp_test(testsVec, 1099511627813ULL, 5LL, false);
+    add_slprp_test(testsVec, 39972590422099ULL, -7LL, true);    /* SLPSP 203419x196503721 */
+    add_slprp_test(testsVec, 83528108424479ULL, -7LL, true);    /* SLPSP 7290697x11456807 */
+    add_slprp_test(testsVec, 9007199254741003ULL, 5LL, false);
+    add_slprp_test(testsVec, 576460752303423623ULL, 5LL, false);
+    add_slprp_test(testsVec, 576460752303423629ULL, -7LL, false);
+    add_slprp_test(testsVec, 576460752303423641ULL, -7LL, false);
+    add_slprp_test(testsVec, 576460752303423643ULL, 5LL, false);
+    add_slprp_test(testsVec, 17000000000000000023ULL, 5LL, false);
+    add_slprp_test(testsVec, uint64(-1) - 32, int64(5), false);
     // End Composite values of n
 
 
