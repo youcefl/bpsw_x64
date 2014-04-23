@@ -116,6 +116,7 @@ build_slprp_tests()
     add_slprp_test(testsVec, 1099511627813ULL, 5LL, false);
     add_slprp_test(testsVec, 39972590422099ULL, -7LL, true);    /* SLPSP 203419x196503721 */
     add_slprp_test(testsVec, 83528108424479ULL, -7LL, true);    /* SLPSP 7290697x11456807 */
+    add_slprp_test(testsVec, 83558429460899ULL, -11LL, true);    /* SLPSP 9141029x9141031 */
     add_slprp_test(testsVec, 9007199254741003ULL, 5LL, false);
     add_slprp_test(testsVec, 576460752303423623ULL, 5LL, false);
     add_slprp_test(testsVec, 576460752303423629ULL, -7LL, false);
