@@ -152,10 +152,14 @@ after_v2mq_ae_q:                        ; now r11 contains V^2 - 2q (mod n)
 
     ; U(2k+1) = (U(2k) + V(2k)) / 2
     mov     rax, rcx
-    add     rax, r11                    ; @todo: what about possible overflow ?
+    xor     rdx, rdx
+    add     rax, r11
+    adc     rdx, rdx
+    div     qword [rsp]
+    mov     rax, rdx
     test    rax, 1
     jz      uv_sum_is_even
-    add     rax, qword [rsp]
+    add     rax, qword [rsp]            ; @todo: what about possible overflow ?
 uv_sum_is_even:
     shr     rax, 1
     xor     rdx, rdx
@@ -167,10 +171,14 @@ uv_sum_is_even:
     mul     qword [rsp + 8h]            ; rax <- U(2k) * D
     div     qword [rsp]
     mov     rax, rdx
-    add     rax, r11                    ; @todo: what about possible overflow ?
+    xor     rdx, rdx
+    add     rax, r11
+    adc     rdx, rdx
+    div     qword [rsp]
+    mov     rax, rdx
     test    rax, 1
     jz      duv_sum_is_even
-    add     rax, qword [rsp]
+    add     rax, qword [rsp]            ; @todo: what about possible overflow ?
 duv_sum_is_even:
     shr     rax, 1                      ; rax <- rax / 2
     mov     rcx, qword [rsp + 20h]      ; rcx <- U(2k+1)
