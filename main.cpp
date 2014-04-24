@@ -73,14 +73,20 @@ build_slprp_tests()
     // End of values taken from A217255
 
     // Begin Prime values of n
+    add_slprp_test(testsVec, 61051ULL, -31LL, true);
+    add_slprp_test(testsVec, 399499ULL, -43LL, true);
+    add_slprp_test(testsVec, 4355311ULL, 61LL, true);
+    add_slprp_test(testsVec, 5715319ULL, -67LL, true);
     add_slprp_test(testsVec, 4294967311ULL, -7LL, true);
     add_slprp_test(testsVec, 4294967357ULL, 5LL, true);
     add_slprp_test(testsVec, 4294967371ULL, -11LL, true);
+    add_slprp_test(testsVec, 18536536771ULL, -103LL, true);
     add_slprp_test(testsVec, 263456789093ULL, 5LL, true);
     add_slprp_test(testsVec, 1099511627791ULL, -7LL, true);
     add_slprp_test(testsVec, 1099511627803ULL, 5LL, true);
     add_slprp_test(testsVec, 1099511627831ULL, 13LL, true);
     add_slprp_test(testsVec, 9007199254740997ULL, 5LL, true);
+    add_slprp_test(testsVec, 9007199256950959ULL, -67LL, true);
     add_slprp_test(testsVec, 576460752303423619ULL, 13LL, true);
     add_slprp_test(testsVec, 576460752303423649ULL, -11LL, true);
     add_slprp_test(testsVec, 576460752303423733ULL, 5LL, true);
@@ -91,11 +97,18 @@ build_slprp_tests()
     add_slprp_test(testsVec, 2305843009213693921ULL, -7LL, true);
     add_slprp_test(testsVec, 2305843009213693951ULL, 17LL, true);
     add_slprp_test(testsVec, 2305843009213693967ULL, 5LL, true);
+    add_slprp_test(testsVec, 2305843009220204479ULL, -71LL, true);
     add_slprp_test(testsVec, 9000000000000000041ULL, -11LL, true);
     add_slprp_test(testsVec, 9223372036854775507ULL, 5LL, true);
+    add_slprp_test(testsVec, 9223372036866316891ULL, -83LL, true);
+    add_slprp_test(testsVec, 9223372036918424191ULL, 97LL, true);
+    add_slprp_test(testsVec, 9223372037009299789ULL, -107LL, true);
+    add_slprp_test(testsVec, 9223372037410063339ULL, 97LL, true);
     add_slprp_test(testsVec, 10000000000000000051ULL, -7LL, true);
     add_slprp_test(testsVec, 12345678901234567891ULL, -11L, true);
     add_slprp_test(testsVec, 17000000000000000003ULL, 5LL, true);
+    add_slprp_test(testsVec, 18446744064055665229ULL, 97LL, true);
+    add_slprp_test(testsVec, 18446744064067846081ULL, -83LL, true);
     add_slprp_test(testsVec, uint64(-1) - 58, int64(5), true);
     // End Prime values of n
 
@@ -166,7 +179,6 @@ build_slprp_tests()
     add_slprp_test(testsVec, uint64(-1) - 32, int64(5), false);
     // End Composite values of n
 
-
     return testsVec;
 }
 
@@ -193,7 +205,6 @@ run_slprp_tests()
         std::cout << testRes.str();
     }
 }
-
 
 
 int main(int argc, char** argv)

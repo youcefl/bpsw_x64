@@ -35,14 +35,17 @@ is_slprp proc
 ;       n is slprp if and only if one of the following conditions holds:
 ;           U(d) = 0 (mod n)
 ;           V(d.2^r) = 0 (mod n) for some r < s
+; ------------------------------------------------------------------------------------------------
     sub     rsp, 40h
 ;%ifndef WIN64
 ;    mov     rcx, rdi    ; this first two lines is to make it look like Windows,
 ;    mov     rdx, rsi    ; they have to be removed if we are on Windows
 ;%endif
-    mov     qword ptr [rsp + 28h], 2h   ; Constant 2 used for division below (still don't know how to divide rdx:rax by 2)
     mov     qword ptr [rsp], rcx
     mov     qword ptr [rsp + 8h], rdx
+    mov     rax, 8000000000000000h          ; constants 2^63 used for division by two of
+    mov     qword ptr [rsp + 28h], rax      ; unsigned 128-bit values 
+
     mov     rax, rdx
     neg     rax
     add     rax, 1
@@ -151,12 +154,14 @@ after_v2mq_ae_q:						; now r11 contains V^2 - 2q (mod n)
     xor     rdx, rdx
     test    rax, 1
     jz      uv_sum_is_even
-    add     rax, qword ptr [rsp]        ; @todo: what about possible overflow ?
+    add     rax, qword ptr [rsp]
     adc     rdx, rdx
 uv_sum_is_even:
-;    shr     rax, 1
-;    shr     rdx, 1
-    div     qword ptr [rsp + 28h]
+    shr     rax, 1                      ; divide the 128-bit value rdx:rax by 2
+    shr     rdx, 1
+    jnc     no_carry_1
+    xor     rax, qword ptr [rsp + 28h]  ; sets the high bit, masm didn't let me use immediate 2^63
+no_carry_1:
 	div		qword ptr [rsp]
     mov     qword ptr [rsp + 20h], rdx  ; backup U(2k+1), we still need U(2k)
 
@@ -173,11 +178,14 @@ uv_sum_is_even:
     xor     rdx, rdx
     test    rax, 1
     jz      duv_sum_is_even
-    add     rax, qword ptr [rsp]        ; @todo: what about possible overflow ?
+    add     rax, qword ptr [rsp]
     adc     rdx, rdx
 duv_sum_is_even:
-    div     qword ptr [rsp + 28h]
-;    shr     rax, 1                      ; rax <- rax / 2
+    shr     rax, 1                      ; divide the 128-bit value rdx:rax by 2
+    shr     rdx, 1
+    jnc     no_carry_2
+    xor     rax, qword ptr [rsp + 28h]  ; sets the high bit, masm didn't let me use immediate 2^63
+no_carry_2:
 	div		qword ptr [rsp]
     mov     r11, rdx                    ; r11 <- V(2k+1)
     mov     rcx, qword ptr [rsp + 20h]  ; rcx <- U(2k+1)

@@ -1,27 +1,27 @@
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 ; Creation date: 2014.04.21
 ; Creator: Youcef Lemsafer
 ; Authors: Youcef Lemsafer
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 bits 64
 default rel
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 SECTION .code
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 
 global is_slprp
 
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 ; We assume that n is odd > 1 and that Q = (1 - D)/4
 ; where D is the first element in {5, -7, 9, -11, ...}
 ; such that the Jacobi symbol (D/n) = -1.
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 ; bool is_slprp(uint64 n, int64 D);
-; ------------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 ; Recall that:
 ;     - on Linux/Unix n is in rdi, D is in rsi
 ;     - on Windows n is in rcx and D is in rdx
@@ -37,15 +37,19 @@ global is_slprp
 ;       n is slprp if and only if one of the following conditions holds:
 ;           U(d) = 0 (mod n)
 ;           V(d.2^r) = 0 (mod n) for some r < s
+; ------------------------------------------------------------------------------
 is_slprp:
     sub     rsp, 40h
 %ifndef WIN64
     mov     rcx, rdi    ; this first two lines is to make it look like Windows,
     mov     rdx, rsi    ; they have to be removed if we are on Windows
 %endif
-    mov     qword [rsp + 28h], 2h   ; Constant 2 used for division below (still don't know how to divide rdx:rax by 2)
     mov     [rsp], rcx
     mov     [rsp + 8h], rdx
+    mov     rax, 1                      ; compute and store 2^63 used below
+    shl     rax, 63                     ; for division by 2 of unsigned 128-bit
+    mov     qword [rsp + 28h], rax      ; number rdx:rax (because we are not
+                                        ; allowed to use immediate 1 << 63)
     mov     rax, rdx
     neg     rax
     add     rax, 1
@@ -81,7 +85,7 @@ div2:
     shr     r10, 1
     inc     r9
     jmp     div2
-div2_end:                               ; at this point d is in r8 and s is in r9
+div2_end:                           ; at this point d is in r8 and s is in r9
 
     ; Compute U(d) mod n and V(d) mod n
 
@@ -109,7 +113,7 @@ loop_d_msbmask:                         ; loop until r10 is 0
     div     qword [rsp]
     mov     r11, rdx                    ; r11 <- V^2 (mod n)
 
-    cmp     r11, qword [rsp + 18h]      ; if (V^2 < q) then V^2 - q would be negative
+    cmp     r11, qword [rsp + 18h]      ; if (V^2 < q) then V^2 - q would be < 0
     jb      v2_b_q
     jae     v2_ae_q
 v2_b_q:
@@ -122,7 +126,8 @@ v2_ae_q:
     sub     r11, qword [rsp + 18h]
 after_v2_ae_q:
 
-    cmp     r11, qword [rsp + 18h]      ; if (V^2 - q < q) then V^2 - 2q would be negative
+    cmp     r11, qword [rsp + 18h]      ; if (V^2 - q < q) then V^2 - 2q would
+                                        ; be negative
     jb      v2mq_b_q
     jae     v2mq_ae_q
 v2mq_b_q:
@@ -157,7 +162,11 @@ after_v2mq_ae_q:                        ; now r11 contains V^2 - 2q (mod n)
     add     rax, qword [rsp]
     adc     rdx, rdx
 uv_sum_is_even:
-    div     qword [rsp + 28h]
+    shr     rax, 1                      ; division by 2 of the unsigned 128-bit
+    shr     rdx, 1                      ; integer rdx:rax
+    jnc     no_carry_1
+    xor     rax, qword [rsp + 28h]
+no_carry_1:
     div     qword [rsp]
     mov     qword [rsp + 20h], rdx      ; backup U(2k+1), we still need U(2k)
 
@@ -177,7 +186,11 @@ uv_sum_is_even:
     add     rax, qword [rsp]
     adc     rdx, rdx
 duv_sum_is_even:
-    div     qword [rsp + 28h]           ; rax <- rax / 2
+    shr     rax, 1                      ; division by 2 of the unsigned 128-bit
+    shr     rdx, 1                      ; integer rdx:rax
+    jnc     no_carry_2
+    xor     rax, qword [rsp + 28h]
+no_carry_2:
     div     qword [rsp]
     mov     r11, rdx                    ; r11 <- V(2k+1)
     mov     rcx, qword [rsp + 20h]      ; rcx <- U(2k+1)
