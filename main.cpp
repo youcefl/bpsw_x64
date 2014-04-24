@@ -92,6 +92,7 @@ build_slprp_tests()
     add_slprp_test(testsVec, 2305843009213693951ULL, 17LL, true);
     add_slprp_test(testsVec, 2305843009213693967ULL, 5LL, true);
     add_slprp_test(testsVec, 9000000000000000041ULL, -11LL, true);
+    add_slprp_test(testsVec, 9223372036854775507ULL, 5LL, true);
     add_slprp_test(testsVec, 10000000000000000051ULL, -7LL, true);
     add_slprp_test(testsVec, 12345678901234567891ULL, -11L, true);
     add_slprp_test(testsVec, 17000000000000000003ULL, 5LL, true);
@@ -115,6 +116,38 @@ build_slprp_tests()
     add_slprp_test(testsVec, 1099511627801ULL, -7LL, false);
     add_slprp_test(testsVec, 1099511627813ULL, 5LL, false);
     add_slprp_test(testsVec, 39972590422099ULL, -7LL, true);    /* SLPSP 203419x196503721 */
+    add_slprp_test(testsVec, 71015542332359ULL, -15LL, true);   /* SLPSP 5958839x11917681 */
+    add_slprp_test(testsVec, 71026840741877ULL, 5LL, true);  /* SLPSP 5959313x11918629 */
+    add_slprp_test(testsVec, 71027509003163ULL, 5LL, true);  /* SLPSP 3440627x20643769 */
+    add_slprp_test(testsVec, 71028048949859ULL, -15LL, true);  /* SLPSP 8039x8835433381 */
+    add_slprp_test(testsVec, 71028425928179ULL, -7LL, true);  /* SLPSP 5959381x11918759 */
+    add_slprp_test(testsVec, 71028496858199ULL, -7LL, true);  /* SLPSP 2541089x27951991 */
+    add_slprp_test(testsVec, 71029125005299ULL, -7LL, true);  /* SLPSP 13721x34301x150919 */
+    add_slprp_test(testsVec, 71029563550243ULL, 5LL, true);  /* SLPSP 426763x166437961 */
+    add_slprp_test(testsVec, 71030483737309ULL, -7LL, true);  /* SLPSP 7298827x9731767 */
+    add_slprp_test(testsVec, 71035764857873ULL, 5LL, true);  /* SLPSP 2665253x26652541 */
+    add_slprp_test(testsVec, 71036072324099ULL, -15LL, true);  /* SLPSP 8428289x8428291 */
+    add_slprp_test(testsVec, 71040345630799ULL, -7LL, true);  /* SLPSP 3349163x21211373 */
+    add_slprp_test(testsVec, 71040523518089ULL, -7LL, true);  /* SLPSP 878737x80843897 */
+    add_slprp_test(testsVec, 71040611030759ULL, -7LL, true);  /* SLPSP 4214279x16857121 */
+    add_slprp_test(testsVec, 71041841765927ULL, 5LL, true);  /* SLPSP 2665367x26653681 */
+    add_slprp_test(testsVec, 71042052321701ULL, -7LL, true);  /* SLPSP 4214323x16857287 */
+    add_slprp_test(testsVec, 71044690405037ULL, 5LL, true);  /* SLPSP 397337x178802101 */
+    add_slprp_test(testsVec, 71045053572089ULL, -15LL, true);  /* SLPSP 5960077x11920157 */
+    add_slprp_test(testsVec, 71045424333659ULL, -7LL, true);  /* SLPSP 1147021x61939079 */
+    add_slprp_test(testsVec, 71047943319499ULL, -7LL, true);  /* SLPSP 1854131x38318729 */
+    add_slprp_test(testsVec, 71051156822777ULL, 5LL, true);  /* SLPSP 5960333x11920669 */
+    add_slprp_test(testsVec, 71051349391541ULL, -11LL, true);  /* SLPSP 1720603x41294447 */
+    add_slprp_test(testsVec, 71054701394137ULL, 5LL, true);  /* SLPSP 4552393x15608209 */
+    add_slprp_test(testsVec, 71055518472509ULL, -11LL, true);  /* SLPSP 6882611x10323919 */
+    add_slprp_test(testsVec, 71055733818029ULL, -15LL, true);  /* SLPSP 580997x122299657 */
+    add_slprp_test(testsVec, 71058959643359ULL, -11LL, true);  /* SLPSP 960647x73969897 */
+    add_slprp_test(testsVec, 71061275485199ULL, -7LL, true);  /* SLPSP 1901x37380997099 */
+    add_slprp_test(testsVec, 71061689478779ULL, -7LL, true);  /* SLPSP 5331479x13328701 */
+    add_slprp_test(testsVec, 71062113271313ULL, 5LL, true);  /* SLPSP 126653x561077221 */
+    add_slprp_test(testsVec, 71062298016079ULL, -7LL, true);  /* SLPSP 4866973x14600923 */
+    add_slprp_test(testsVec, 71063077990277ULL, 5LL, true);  /* SLPSP 5960833x11921669 */
+    add_slprp_test(testsVec, 71066892975077ULL, 5LL, true);  /* SLPSP 5960993x11921989 */
     add_slprp_test(testsVec, 83528108424479ULL, -7LL, true);    /* SLPSP 7290697x11456807 */
     add_slprp_test(testsVec, 83558429460899ULL, -11LL, true);    /* SLPSP 9141029x9141031 */
     add_slprp_test(testsVec, 9007199254741003ULL, 5LL, false);
@@ -122,7 +155,14 @@ build_slprp_tests()
     add_slprp_test(testsVec, 576460752303423629ULL, -7LL, false);
     add_slprp_test(testsVec, 576460752303423641ULL, -7LL, false);
     add_slprp_test(testsVec, 576460752303423643ULL, 5LL, false);
+    add_slprp_test(testsVec, 9223372036854775511ULL, -7LL, false);
+    add_slprp_test(testsVec, 9223372036854775517ULL, 5LL, false);
+    add_slprp_test(testsVec, 9223372036854775649ULL, -7LL, false);
+    add_slprp_test(testsVec, 9223372036854775753ULL, 5LL, false);
+    add_slprp_test(testsVec, 9223372036854775853ULL, 5LL, false);
+    add_slprp_test(testsVec, 9223372036854776011ULL, -11LL, false);
     add_slprp_test(testsVec, 17000000000000000023ULL, 5LL, false);
+    add_slprp_test(testsVec, 18446743979220271189ULL, -7LL, false);
     add_slprp_test(testsVec, uint64(-1) - 32, int64(5), false);
     // End Composite values of n
 
