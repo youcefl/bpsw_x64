@@ -7,11 +7,14 @@ NASM_FLAGS = -D WIN64 -f win64
 all: asm
 
 
-asm: lucas.o main.o
-	$(CC) -o asm lucas.o main.o
+asm: arith.o lucas.o main.o
+	$(CC) -o asm arith.o lucas.o main.o
 
 lucas.o: lucas.s
 	nasm $(NASM_FLAGS) -o lucas.o lucas.s
+
+arith.o: arith.s
+	nasm $(NASM_FLAGS) -o arith.o arith.s
 
 main.o: main.cpp
 	$(CC) -c -o main.o main.cpp

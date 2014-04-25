@@ -1,22 +1,56 @@
 /*
-* Creation date: 2014.04.21
-* Creator: Youcef Lemsafer
+* Creation date: 2014.04.16
+* Creators: Youcef Lemsafer
 * Authors: Youcef Lemsafer
 */
 #include <string.h>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <vector>
+
+
 
 typedef long long int64;
 typedef unsigned long long uint64;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+bool is_prime(unsigned long long p);
 /*
 * We assume that P = 1 and Q = (1 - D)/4
 * where D is the first element in {5, -7, 9, -11, ...}
 * such that the Jacobi symbol (D/n) = -1.
 */
-extern "C" bool is_slprp(uint64 n, int64 D);
+bool is_slprp(uint64 n, int64 D);
+int64 jacobi_symbol(int64 a, uint64 m);
+
+#ifdef __cplusplus
+}
+#endif
+
+void
+print_primes(std::ostream & out)
+{
+    out << std::endl;
+    uintptr_t j = 1;
+    for(uintptr_t n(0); n < 10001; ++n)
+    {
+        if(is_prime(n)) {
+            out.fill(' ');
+            out.width(11);
+            out << n;
+            if( (j & 7) == 0 ) {
+                out << std::endl << std::endl;
+                j = 0;
+            }
+            ++j;
+        }
+    }
+    out << std::endl;
+}
 
 
 template <typename V>
@@ -207,11 +241,154 @@ run_slprp_tests()
 }
 
 
+void
+run_is_prime_tests(std::vector<std::pair<uint64, bool>> const & is_prime_tests, std::ostream & out)
+{
+    uint64 count = 0, failures_count = 0;
+    for(auto const & test : is_prime_tests)
+    {
+        bool result = is_prime(test.first);
+        bool ok = (result == test.second);
+        out << "is_prime(" << test.first <<")    " << (ok ? "OK" : "FAIL");
+        if(!ok) {
+            out << " (Expected: " << test.second << " Actual: " << result << ")";
+            ++failures_count;
+        }
+        out << std::endl;
+        ++count;
+    }
+    if( failures_count != 0 )
+    {
+        out << failures_count << " tests failed (" << count << " run)." << std::endl;
+    }
+    else
+    {
+        out << "ALL " << count << " tests passed." << std::endl;
+    }
+}
+
+
+
+std::vector<std::pair<uint64, bool>>
+build_is_prime_tests()
+{
+    std::vector<std::pair<uint64, bool>> testVec;
+    testVec.push_back(std::make_pair(0, false));
+    testVec.push_back(std::make_pair(1, false));
+    testVec.push_back(std::make_pair(2, true ));
+    testVec.push_back(std::make_pair(3, true ));
+    testVec.push_back(std::make_pair(4, false));
+    testVec.push_back(std::make_pair(5, true ));
+    testVec.push_back(std::make_pair(6, false));
+    testVec.push_back(std::make_pair(7, true ));
+    testVec.push_back(std::make_pair(8, false));
+    testVec.push_back(std::make_pair(9, false));
+    testVec.push_back(std::make_pair(499, true));
+    testVec.push_back(std::make_pair(509, true));
+    testVec.push_back(std::make_pair(511, false));
+    testVec.push_back(std::make_pair(512, false));
+    testVec.push_back(std::make_pair(751, true));
+    testVec.push_back(std::make_pair(997, true));
+    testVec.push_back(std::make_pair(2047, false));
+    testVec.push_back(std::make_pair(9973, true));
+    testVec.push_back(std::make_pair(10007, true));
+    testVec.push_back(std::make_pair(15841, false));
+    testVec.push_back(std::make_pair(16381, true));
+    testVec.push_back(std::make_pair(29341, false));
+    testVec.push_back(std::make_pair(42799, false));
+    testVec.push_back(std::make_pair(49141, false));
+    testVec.push_back(std::make_pair(65537, true));     // F4
+    testVec.push_back(std::make_pair(25326001, false));  // 25326001 = 2251 * 11251, 2-sprp
+    testVec.push_back(std::make_pair(((1ULL)<<31) - 1, true));  // M31
+    testVec.push_back(std::make_pair(((1ULL)<<32) + 1, false)); // F5
+    testVec.push_back(std::make_pair(((1ULL)<<61) - 1, true));  // M61
+    testVec.push_back(std::make_pair(uint64(-1)-32, false));
+    testVec.push_back(std::make_pair(uint64(-1)-2, false));
+    testVec.push_back(std::make_pair(uint64(-1), false));
+    return testVec;
+}
+
+
+template <typename T>
+void
+add_jacobi_test(T & container, int64 a, uint64 m, int64 r)
+{
+    container.push_back(std::make_pair(std::make_pair(a, m), r));
+}
+
+std::vector<std::pair<std::pair<int64, uint64>, int64>>
+build_jacobi_symbol_tests()
+{
+    std::vector<std::pair<std::pair<int64, uint64>, int64>> tests;
+    add_jacobi_test(tests,               0LL,                     1ULL,     1LL);
+    add_jacobi_test(tests,               0LL,                     2ULL,     0LL);
+    add_jacobi_test(tests,               0LL,                    17ULL,     0LL);
+    add_jacobi_test(tests,               1LL,                     1ULL,     1LL);
+    add_jacobi_test(tests,               1LL,                     2ULL,     1LL);
+    add_jacobi_test(tests,               1LL,                     3ULL,     1LL);
+    add_jacobi_test(tests,               2LL,                   127ULL,     1LL);
+    add_jacobi_test(tests,               2LL,                   125ULL,    -1LL);
+    add_jacobi_test(tests,              -5LL,                   127ULL,     1LL);
+    add_jacobi_test(tests,               5LL,                   127ULL,    -1LL);
+    add_jacobi_test(tests,             -11LL,                   127ULL,    -1LL);
+    add_jacobi_test(tests,              14LL,                     7ULL,     0LL);
+    add_jacobi_test(tests,            1212LL,            1200000007ULL,    -1LL);
+    add_jacobi_test(tests,            1236LL,                 20003ULL,     1LL);
+    add_jacobi_test(tests,            1411LL,                   317ULL,    -1LL);
+    add_jacobi_test(tests,            1735LL,                   507ULL,     1LL);
+    add_jacobi_test(tests,          222222LL,                304679ULL,    -1LL);
+    add_jacobi_test(tests,          222222LL,                324899ULL,     1LL);
+    add_jacobi_test(tests,        92177777LL,           12000008007ULL,    -1LL);
+    add_jacobi_test(tests,      9000000007LL,         (1ULL << 63) + 1,    -1LL);
+    add_jacobi_test(tests,     -9000000007LL,         (1ULL << 63) + 1,    -1LL);
+    add_jacobi_test(tests,     12678676777LL,       222222222222223ULL,     1LL);
+    add_jacobi_test(tests,     70001000387LL,               uint64(-1),     1LL);
+    add_jacobi_test(tests,    -70001000387LL,               uint64(-1),    -1LL);
+    add_jacobi_test(tests,  12299356789231LL,             678675867ULL,     1LL);
+    add_jacobi_test(tests,  54665867345453LL,  17199909785980786011ULL,     0LL);
+    add_jacobi_test(tests, int64(1ULL << 63),  17199909785980786011ULL,     1LL);
+    add_jacobi_test(tests, int64(1ULL << 63),               uint64(-1),    -1LL);
+
+    return tests;
+}
+
+void
+run_jacobi_symbol_tests( 
+      std::vector<std::pair<std::pair<int64, uint64>, int64>> const & tests
+    , std::ostream & out
+    )
+{
+    for(auto const & test : tests)
+    {
+        auto const & input = test.first;
+        auto expected = test.second;
+        auto actual = jacobi_symbol(input.first, input.second);
+        std::ostringstream ostr;
+        ostr << "jacobi_symbol(" << input.first 
+                    << ", " << input.second << ") ";
+        out << ostr.str();
+        for(auto i(ostr.str().size()), i_max(decltype(ostr.str().size())(60)); i < i_max; ++i)
+        {
+            out << " ";
+        }
+
+        if( actual != expected ) {
+            out << "FAIL (Expected: " << expected << "  Actual: " << actual << ")";
+        } else {
+            out << "OK";
+        }
+        out << std::endl;
+    }
+}
+
+
 int main(int argc, char** argv)
 {
     if( argc == 2 ) {
         if( !strcmp(argv[1], "-t") ) {
+            run_jacobi_symbol_tests(build_jacobi_symbol_tests(), std::cout);
             run_slprp_tests();
+            run_is_prime_tests(build_is_prime_tests(), std::cout);
         }
     }
 }
