@@ -22,7 +22,7 @@ odd_primes: dq   3,  5,  7,  11, 13, 17, 19, 23, \
 ; L = 97, trial division limit
 td_bound:  dq    97*97
 
-%macro  searchd    2                ; %1 is d
+%macro  findd    2                  ; %1 is d
                                     ; %2 is p
     mov     rdx, %2
     mov     rcx, %1
@@ -87,57 +87,30 @@ end_td_loop:
 
     ; (2) Step two: search for D in {5, -7, 9, -11, ... } such that jacobi_symbol(D, p) = -1
     mov     [rsp + 8], rcx
-    searchd   5, rcx 
-    searchd	-7	, [rsp + 8]
-    searchd	9	, [rsp + 8]
-    searchd	-11	, [rsp + 8]
-    searchd	13	, [rsp + 8]
-    searchd	-15	, [rsp + 8]
-    searchd	17	, [rsp + 8]
-    searchd	-19	, [rsp + 8]
-    searchd	21	, [rsp + 8]
-    searchd	-23	, [rsp + 8]
-    searchd	25	, [rsp + 8]
-    searchd	-27	, [rsp + 8]
-    searchd	29	, [rsp + 8]
-    searchd	-31	, [rsp + 8]
-    searchd	33	, [rsp + 8]
-    searchd	-35	, [rsp + 8]
-    searchd	37	, [rsp + 8]
-    searchd	-39	, [rsp + 8]
-    searchd	41	, [rsp + 8]
-    searchd	-43	, [rsp + 8]
-    searchd	45	, [rsp + 8]
-    searchd	-47	, [rsp + 8]
-    searchd	49	, [rsp + 8]
-    searchd	-51	, [rsp + 8]
-    searchd	53	, [rsp + 8]
-    searchd	-55	, [rsp + 8]
-    searchd	57	, [rsp + 8]
-    searchd	-59	, [rsp + 8]
-    searchd	61	, [rsp + 8]
-    searchd	-63	, [rsp + 8]
-    searchd	65	, [rsp + 8]
-    searchd	-67	, [rsp + 8]
-    searchd	69	, [rsp + 8]
-    searchd	-71	, [rsp + 8]
-    searchd	73	, [rsp + 8]
-    searchd	-75	, [rsp + 8]
-    searchd	77	, [rsp + 8]
-    searchd	-79	, [rsp + 8]
-    searchd	81	, [rsp + 8]
-    searchd	-83	, [rsp + 8]
-    searchd	85	, [rsp + 8]
-    searchd	-87	, [rsp + 8]
-    searchd	89	, [rsp + 8]
-    searchd	-91	, [rsp + 8]
-    searchd	93	, [rsp + 8]
-    searchd	-95	, [rsp + 8]
-    searchd	97	, [rsp + 8]
-    searchd	-99	, [rsp + 8]
-    searchd	101	, [rsp + 8]
+    findd    5, rcx
+    findd   -7, [rsp + 8]
+    findd    9, [rsp + 8]
+    findd  -11, [rsp + 8]
+    findd   13, [rsp + 8]
+    findd  -15, [rsp + 8]
+    findd   17, [rsp + 8]
+    findd  -19, [rsp + 8]
+    findd   21, [rsp + 8]
+    findd  -23, [rsp + 8]
+    findd   25, [rsp + 8]
+    findd  -27, [rsp + 8]
+    findd   29, [rsp + 8]
+    findd  -31, [rsp + 8]
+    findd   33, [rsp + 8]
+    findd  -35, [rsp + 8]
+    findd   37, [rsp + 8]
+    findd  -39, [rsp + 8]
+    findd   41, [rsp + 8]
+    findd  -43, [rsp + 8]
+    findd   45, [rsp + 8]
+    findd  -47, [rsp + 8]
 
-found_d:    
+found_d:
 
 
 return_is_prime_0:
@@ -267,7 +240,6 @@ negative_a:
     neg     rax
 do_not_neg_rax:
     ret
-    
 ; ------------------------------------------------------------------------------------------------
 ; end jacobi_symbol
 ; ------------------------------------------------------------------------------------------------

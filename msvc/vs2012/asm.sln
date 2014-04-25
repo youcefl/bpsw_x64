@@ -1,22 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lucas", "lucas.vcxproj", "{933C543E-D272-4147-8E54-6ECE98C7D40F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asm", "asm.vcxproj", "{933C543E-D272-4147-8E54-6ECE98C7D40F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
-		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{933C543E-D272-4147-8E54-6ECE98C7D40F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{933C543E-D272-4147-8E54-6ECE98C7D40F}.Debug|Win32.Build.0 = Debug|Win32
 		{933C543E-D272-4147-8E54-6ECE98C7D40F}.Debug|x64.ActiveCfg = Debug|x64
 		{933C543E-D272-4147-8E54-6ECE98C7D40F}.Debug|x64.Build.0 = Debug|x64
-		{933C543E-D272-4147-8E54-6ECE98C7D40F}.Release|Win32.ActiveCfg = Release|Win32
-		{933C543E-D272-4147-8E54-6ECE98C7D40F}.Release|Win32.Build.0 = Release|Win32
 		{933C543E-D272-4147-8E54-6ECE98C7D40F}.Release|x64.ActiveCfg = Release|x64
 		{933C543E-D272-4147-8E54-6ECE98C7D40F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
