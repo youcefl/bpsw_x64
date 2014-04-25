@@ -5,6 +5,7 @@
 ; ------------------------------------------------------------------------------------------------
 
 printf PROTO C :VARARG
+is_slprp PROTO C :QWORD, :QWORD
 
 ; ------------------------------------------------------------------------------------------------
 .data
@@ -17,14 +18,15 @@ odd_primes dq   3,  5,  7,  11, 13, 17, 19, 23, \
 ; L = 97, trial division limit
 td_bound  dq    97*97
 
-searchd  macro  d, p
+fndd  macro  d, p
     mov     rdx, p
     mov     rcx, d
     call    jacobi_symbol
-    test    rax, rax                ; if jacobi_symbol(D, 5) = 0 then we've found a factor
+    test    rax, rax                ; if jacobi_symbol(D, p) = 0 then we've found a factor
     jz      the_end
-    cmp     rax, -1
-    je      found_d
+    mov     r11, d
+    test    rax, rax
+    js      found_d
 endm
 
 ; ------------------------------------------------------------------------------------------------
@@ -78,64 +80,43 @@ end_td_loop:
 
     ; (2) Step two: search for D in {5, -7, 9, -11, ... } such that jacobi_symbol(D, p) = -1
     mov     [rsp + 8], rcx
-    searchd   5, rcx 
-    searchd	-7	, [rsp + 8]
-    searchd	9	, [rsp + 8]
-    searchd	-11	, [rsp + 8]
-    searchd	13	, [rsp + 8]
-    searchd	-15	, [rsp + 8]
-    searchd	17	, [rsp + 8]
-    searchd	-19	, [rsp + 8]
-    searchd	21	, [rsp + 8]
-    searchd	-23	, [rsp + 8]
-    searchd	25	, [rsp + 8]
-    searchd	-27	, [rsp + 8]
-    searchd	29	, [rsp + 8]
-    searchd	-31	, [rsp + 8]
-    searchd	33	, [rsp + 8]
-    searchd	-35	, [rsp + 8]
-    searchd	37	, [rsp + 8]
-    searchd	-39	, [rsp + 8]
-    searchd	41	, [rsp + 8]
-    searchd	-43	, [rsp + 8]
-    searchd	45	, [rsp + 8]
-    searchd	-47	, [rsp + 8]
-    searchd	49	, [rsp + 8]
-    searchd	-51	, [rsp + 8]
-    searchd	53	, [rsp + 8]
-    searchd	-55	, [rsp + 8]
-    searchd	57	, [rsp + 8]
-    searchd	-59	, [rsp + 8]
-    searchd	61	, [rsp + 8]
-    searchd	-63	, [rsp + 8]
-    searchd	65	, [rsp + 8]
-    searchd	-67	, [rsp + 8]
-    searchd	69	, [rsp + 8]
-    searchd	-71	, [rsp + 8]
-    searchd	73	, [rsp + 8]
-    searchd	-75	, [rsp + 8]
-    searchd	77	, [rsp + 8]
-    searchd	-79	, [rsp + 8]
-    searchd	81	, [rsp + 8]
-    searchd	-83	, [rsp + 8]
-    searchd	85	, [rsp + 8]
-    searchd	-87	, [rsp + 8]
-    searchd	89	, [rsp + 8]
-    searchd	-91	, [rsp + 8]
-    searchd	93	, [rsp + 8]
-    searchd	-95	, [rsp + 8]
-    searchd	97	, [rsp + 8]
-    searchd	-99	, [rsp + 8]
-    searchd	101	, [rsp + 8]
-    mov     rax, 1
-    sub     rsp, 40h
-    lea     rcx, printfmt
-    mov     rdx, [rsp + 48h]
-    call    printf
-    add     rsp, 40h
+    fndd      5, rcx 
+    fndd     -7, [rsp + 8]
+    fndd      9, [rsp + 8]
+    fndd    -11, [rsp + 8]
+    fndd     13, [rsp + 8]
+    fndd    -15, [rsp + 8]
+    fndd     17, [rsp + 8]
+    fndd    -19, [rsp + 8]
+    fndd     21, [rsp + 8]
+    fndd    -23, [rsp + 8]
+    fndd     25, [rsp + 8]
+    fndd    -27, [rsp + 8]
+    fndd     29, [rsp + 8]
+    mov     r11, -31                ; we rely on the fact that jacobi_symbol does not use r11
+loop_find_d:
+    mov     rcx, r11                ; rcx <- d
+    mov     rdx, [rsp + 8]          ; rdx <- p
+    call    jacobi_symbol
+    test    rax, rax
+    jz      the_end                 ; (D|p) = 0 => p is composite
+    test    rax, rax
+    js      found_d
+    test    r11, r11
+    js      d_is_negative
+    add     r11, 2
+    jmp     negate_d
+d_is_negative:
+    sub     r11, 2
+negate_d:
+    neg     r11
+    jmp     loop_find_d
 
 found_d:    
-
+    mov     rcx, [rsp + 8]          ; rcx <- p
+    mov     rdx, r11                ; rdx <- d
+    call    is_slprp
+    jmp     the_end
 
 return_is_prime_0:
     mov     al, 0
