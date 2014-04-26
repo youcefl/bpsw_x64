@@ -309,7 +309,7 @@ not_3_mod_4:
 end_loop_a_not_zero:
     cmp     rdx, 1
     je      return_t
-    mov     rax, 0
+    xor     rax, rax
     ret
 return_t:
     mov     rax, r8

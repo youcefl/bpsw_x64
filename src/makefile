@@ -1,7 +1,7 @@
 
 
 CXX = g++
-CXXFLAGS = -std=c++0x -Ofast
+CXXFLAGS = -static -std=c++0x -Ofast
 NASM_FLAGS = -D WIN64 -f win64
 
 BIN = ../bin
