@@ -10,6 +10,7 @@ default rel
 ; ------------------------------------------------------------------------------
 
 extern printf
+extern is_slprp
 
 ; ------------------------------------------------------------------------------------------------
 SECTION .data
@@ -29,8 +30,9 @@ td_bound:  dq    97*97
     call    jacobi_symbol
     test    rax, rax                ; if jacobi_symbol(d, p) = 0 then we've found a factor
     jz      the_end
-    cmp     rax, -1
-    je      found_d
+    mov     r11, %1
+    test    rax, rax
+    js      found_d
 %endmacro
 
 ; ------------------------------------------------------------------------------------------------
@@ -45,6 +47,7 @@ global jacobi_symbol
 ; ------------------------------------------------------------------------------------------------
 is_prime:
 ; ------------------------------------------------------------------------------------------------
+    sub     rsp, 10h
     ; At this point p is in rcx
     ; If p is 2 return true
     mov     rdx, rcx
@@ -77,7 +80,7 @@ td_loop:
     jmp     td_loop
 
 end_td_loop:
-    cmp     rcx, td_bound           ; at this point if p < L^2 we know for sure that it is a prime
+    cmp     rcx, [td_bound]           ; at this point if p < L^2 we know for sure that it is a prime
     jb      ret_is_prime_1
 
     ; (1) Step one: if p is not 2-sprp it is composite so the test fails
@@ -100,18 +103,33 @@ end_td_loop:
     findd   25, [rsp + 8]
     findd  -27, [rsp + 8]
     findd   29, [rsp + 8]
-    findd  -31, [rsp + 8]
-    findd   33, [rsp + 8]
-    findd  -35, [rsp + 8]
-    findd   37, [rsp + 8]
-    findd  -39, [rsp + 8]
-    findd   41, [rsp + 8]
-    findd  -43, [rsp + 8]
-    findd   45, [rsp + 8]
-    findd  -47, [rsp + 8]
+
+    mov     r11, -31                ; we rely on the fact that jacobi_symbol does not use r11
+loop_find_d:
+    mov     rcx, r11                ; rcx <- d
+    mov     rdx, [rsp + 8]          ; rdx <- p
+    call    jacobi_symbol
+    test    rax, rax
+    jz      the_end                 ; (D|p) = 0 => p is composite
+    test    rax, rax
+    js      found_d
+    test    r11, r11
+    js      d_is_negative
+    add     r11, 2
+    jmp     negate_d
+d_is_negative:
+    sub     r11, 2
+negate_d:
+    neg     r11
+    jmp     loop_find_d
 
 found_d:
-
+    ; Last step: if p is a strong Lucas probable prime for P=1 and Q=(1-D)/4
+    ; then it is a prime
+    mov     rcx, [rsp + 8]
+    mov     rdx, r11
+    call    is_slprp
+    jmp     the_end
 
 return_is_prime_0:
     mov     al, 0
@@ -119,6 +137,7 @@ return_is_prime_0:
 ret_is_prime_1:
     mov     al, 1
 the_end:
+    add     rsp, 10h
     ret
 ; ------------------------------------------------------------------------------------------------
 ; end is_prime

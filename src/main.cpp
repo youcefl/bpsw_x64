@@ -247,11 +247,18 @@ run_is_prime_tests(std::vector<std::pair<uint64, bool>> const & is_prime_tests, 
     uint64 count = 0, failures_count = 0;
     for(auto const & test : is_prime_tests)
     {
-        bool result = is_prime(test.first);
-        bool ok = (result == test.second);
-        out << "is_prime(" << test.first <<")    " << (ok ? "OK" : "FAIL");
-        if(!ok) {
-            out << " (Expected: " << test.second << " Actual: " << result << ")";
+        auto result = is_prime(test.first);
+        auto ok = (result == test.second);
+        std::ostringstream testRes;
+        testRes << "is_prime(" << test.first <<")";
+        out << testRes.str();
+        for(auto i(testRes.str().size() + 1); i < 60; ++i) {
+            out << " ";
+        }
+        if(ok) {
+            out << "OK";
+        } else {
+            out << "FAIL (Expected: " << test.second << " Actual: " << result << ")";
             ++failures_count;
         }
         out << std::endl;
@@ -301,6 +308,43 @@ build_is_prime_tests()
     testVec.push_back(std::make_pair(25326001, false));  // 25326001 = 2251 * 11251, 2-sprp
     testVec.push_back(std::make_pair(((1ULL)<<31) - 1, true));  // M31
     testVec.push_back(std::make_pair(((1ULL)<<32) + 1, false)); // F5
+
+    testVec.push_back(std::make_pair(39972590422099ULL, false));    /* SLPSP 203419x196503721 */
+    testVec.push_back(std::make_pair(71015542332359ULL, false));   /* SLPSP 5958839x11917681 */
+    testVec.push_back(std::make_pair(71026840741877ULL, false));  /* SLPSP 5959313x11918629 */
+    testVec.push_back(std::make_pair(71027509003163ULL, false));  /* SLPSP 3440627x20643769 */
+    testVec.push_back(std::make_pair(71028048949859ULL, false));  /* SLPSP 8039x8835433381 */
+    testVec.push_back(std::make_pair(71028425928179ULL, false));  /* SLPSP 5959381x11918759 */
+    testVec.push_back(std::make_pair(71028496858199ULL, false));  /* SLPSP 2541089x27951991 */
+    testVec.push_back(std::make_pair(71029125005299ULL, false));  /* SLPSP 13721x34301x150919 */
+    testVec.push_back(std::make_pair(71029563550243ULL, false));  /* SLPSP 426763x166437961 */
+    testVec.push_back(std::make_pair(71030483737309ULL, false));  /* SLPSP 7298827x9731767 */
+    testVec.push_back(std::make_pair(71035764857873ULL, false));  /* SLPSP 2665253x26652541 */
+    testVec.push_back(std::make_pair(71036072324099ULL, false));  /* SLPSP 8428289x8428291 */
+    testVec.push_back(std::make_pair(71040345630799ULL, false));  /* SLPSP 3349163x21211373 */
+    testVec.push_back(std::make_pair(71040523518089ULL, false));  /* SLPSP 878737x80843897 */
+    testVec.push_back(std::make_pair(71040611030759ULL, false));  /* SLPSP 4214279x16857121 */
+    testVec.push_back(std::make_pair(71041841765927ULL, false));  /* SLPSP 2665367x26653681 */
+    testVec.push_back(std::make_pair(71042052321701ULL, false));  /* SLPSP 4214323x16857287 */
+    testVec.push_back(std::make_pair(71044690405037ULL, false));  /* SLPSP 397337x178802101 */
+    testVec.push_back(std::make_pair(71045053572089ULL, false));  /* SLPSP 5960077x11920157 */
+    testVec.push_back(std::make_pair(71045424333659ULL, false));  /* SLPSP 1147021x61939079 */
+    testVec.push_back(std::make_pair(71047943319499ULL, false));  /* SLPSP 1854131x38318729 */
+    testVec.push_back(std::make_pair(71051156822777ULL, false));  /* SLPSP 5960333x11920669 */
+    testVec.push_back(std::make_pair(71051349391541ULL, false));  /* SLPSP 1720603x41294447 */
+    testVec.push_back(std::make_pair(71054701394137ULL, false));  /* SLPSP 4552393x15608209 */
+    testVec.push_back(std::make_pair(71055518472509ULL, false));  /* SLPSP 6882611x10323919 */
+    testVec.push_back(std::make_pair(71055733818029ULL, false));  /* SLPSP 580997x122299657 */
+    testVec.push_back(std::make_pair(71058959643359ULL, false));  /* SLPSP 960647x73969897 */
+    testVec.push_back(std::make_pair(71061275485199ULL, false));  /* SLPSP 1901x37380997099 */
+    testVec.push_back(std::make_pair(71061689478779ULL, false));  /* SLPSP 5331479x13328701 */
+    testVec.push_back(std::make_pair(71062113271313ULL, false));  /* SLPSP 126653x561077221 */
+    testVec.push_back(std::make_pair(71062298016079ULL, false));  /* SLPSP 4866973x14600923 */
+    testVec.push_back(std::make_pair(71063077990277ULL, false));  /* SLPSP 5960833x11921669 */
+    testVec.push_back(std::make_pair(71066892975077ULL, false));  /* SLPSP 5960993x11921989 */
+    testVec.push_back(std::make_pair(83528108424479ULL, false));    /* SLPSP 7290697x11456807 */
+    testVec.push_back(std::make_pair(83558429460899ULL, false));    /* SLPSP 9141029x9141031 */
+
     testVec.push_back(std::make_pair(((1ULL)<<61) - 1, true));  // M61
     testVec.push_back(std::make_pair(uint64(-1)-32, false));
     testVec.push_back(std::make_pair(uint64(-1)-2, false));
@@ -367,7 +411,7 @@ run_jacobi_symbol_tests(
         ostr << "jacobi_symbol(" << input.first 
                     << ", " << input.second << ") ";
         out << ostr.str();
-        for(auto i(ostr.str().size()), i_max(decltype(ostr.str().size())(60)); i < i_max; ++i)
+        for(auto i(ostr.str().size()), i_max(decltype(ostr.str().size())(59)); i < i_max; ++i)
         {
             out << " ";
         }
@@ -389,6 +433,32 @@ int main(int argc, char** argv)
             run_jacobi_symbol_tests(build_jacobi_symbol_tests(), std::cout);
             run_slprp_tests();
             run_is_prime_tests(build_is_prime_tests(), std::cout);
+        }
+    } else {
+        auto getStart = false, getLength = false;
+        auto hasStart = false, hasLength = false;
+        uint64 start, length;
+        for(auto pargv = argv + 1; *pargv; ++pargv) {
+            if( getStart ) {
+                start = _strtoui64(*pargv, nullptr, 10);
+                getStart = false;
+                hasStart = true;
+            } else if (getLength) {
+                length = _strtoui64(*pargv, nullptr, 10);
+                getLength = false;
+                hasLength = true;
+            } else if( ! strcmp(*pargv, "-s") ) {
+                getStart = true;
+            } else if( ! strcmp(*pargv, "-l") ) {
+                getLength = true;
+            }
+        }
+        if( hasStart && hasLength ) {
+            for(auto n = start; n < start + length; ++n) {
+                if( is_prime(n) ) {
+                    std::cout << n << std::endl;
+                }
+            }
         }
     }
 }
