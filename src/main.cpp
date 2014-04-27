@@ -32,11 +32,11 @@ int64 jacobi_symbol(int64 a, uint64 m);
 #endif
 
 void
-print_primes(std::ostream & out)
+print_primes_below(uint64 limit, std::ostream & out)
 {
     out << std::endl;
     uintptr_t j = 1;
-    for(uintptr_t n(0); n < 10001; ++n)
+    for(uintptr_t n(0); n < limit; ++n)
     {
         if(is_prime(n)) {
             out.fill(' ');
@@ -435,30 +435,43 @@ int main(int argc, char** argv)
             run_is_prime_tests(build_is_prime_tests(), std::cout);
         }
     } else {
-        auto getStart = false, getLength = false;
-        auto hasStart = false, hasLength = false;
-        uint64 start, length;
+        auto hasStart = false, hasLength = false, hasLimit = false;
+        uint64 start, length, limit;
         for(auto pargv = argv + 1; *pargv; ++pargv) {
-            if( getStart ) {
-                start = _strtoui64(*pargv, nullptr, 10);
-                getStart = false;
-                hasStart = true;
-            } else if (getLength) {
-                length = _strtoui64(*pargv, nullptr, 10);
-                getLength = false;
-                hasLength = true;
-            } else if( ! strcmp(*pargv, "-s") ) {
-                getStart = true;
+            if( ! strcmp(*pargv, "-s") ) {
+                if( *(pargv + 1) ) {
+                    hasStart = true;
+                    start =  _strtoui64(*(pargv + 1), nullptr, 10);
+                    ++pargv;
+                } else {
+                    break;
+                }
             } else if( ! strcmp(*pargv, "-l") ) {
-                getLength = true;
+                if( *(pargv + 1) ) {
+                    hasLength = true;
+                    length =  _strtoui64(*(pargv + 1), nullptr, 10);
+                    ++pargv;
+                } else {
+                    break;
+                }
+            } else if( ! strcmp(*pargv, "-p") ) {
+                if( *(pargv + 1) ) {
+                    hasLimit = true;
+                    limit =  _strtoui64(*(pargv + 1), nullptr, 10);
+                    ++pargv;
+                } else {
+                    break;
+                }
             }
         }
         if( hasStart && hasLength ) {
             for(auto n = start; n < start + length; ++n) {
                 if( is_prime(n) ) {
-                    std::cout << n << std::endl;
+                    std::cout << n << "\n";
                 }
             }
+        } else if( hasLimit ) {
+            print_primes_below(limit, std::cout);
         }
     }
 }
