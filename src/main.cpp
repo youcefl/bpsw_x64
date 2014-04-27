@@ -305,12 +305,14 @@ build_is_prime_tests()
     testVec.push_back(std::make_pair(42799, false));
     testVec.push_back(std::make_pair(49141, false));
     testVec.push_back(std::make_pair(65537, true));     // F4
+    testVec.push_back(std::make_pair(1194649, false));   // 1093^2 is 2-sprp
+    testVec.push_back(std::make_pair(12327121, false));  // 3511^2 is 2-sprp
     testVec.push_back(std::make_pair(25326001, false));  // 25326001 = 2251 * 11251, 2-sprp
     testVec.push_back(std::make_pair(((1ULL)<<31) - 1, true));  // M31
     testVec.push_back(std::make_pair(((1ULL)<<32) + 1, false)); // F5
 
-    testVec.push_back(std::make_pair(39972590422099ULL, false));    /* SLPSP 203419x196503721 */
-    testVec.push_back(std::make_pair(71015542332359ULL, false));   /* SLPSP 5958839x11917681 */
+    testVec.push_back(std::make_pair(39972590422099ULL, false));  /* SLPSP 203419x196503721 */
+    testVec.push_back(std::make_pair(71015542332359ULL, false));  /* SLPSP 5958839x11917681 */
     testVec.push_back(std::make_pair(71026840741877ULL, false));  /* SLPSP 5959313x11918629 */
     testVec.push_back(std::make_pair(71027509003163ULL, false));  /* SLPSP 3440627x20643769 */
     testVec.push_back(std::make_pair(71028048949859ULL, false));  /* SLPSP 8039x8835433381 */
@@ -342,13 +344,47 @@ build_is_prime_tests()
     testVec.push_back(std::make_pair(71062298016079ULL, false));  /* SLPSP 4866973x14600923 */
     testVec.push_back(std::make_pair(71063077990277ULL, false));  /* SLPSP 5960833x11921669 */
     testVec.push_back(std::make_pair(71066892975077ULL, false));  /* SLPSP 5960993x11921989 */
-    testVec.push_back(std::make_pair(83528108424479ULL, false));    /* SLPSP 7290697x11456807 */
-    testVec.push_back(std::make_pair(83558429460899ULL, false));    /* SLPSP 9141029x9141031 */
+    testVec.push_back(std::make_pair(83528108424479ULL, false));  /* SLPSP 7290697x11456807 */
+    testVec.push_back(std::make_pair(83558429460899ULL, false));  /* SLPSP 9141029x9141031 */
 
     testVec.push_back(std::make_pair(((1ULL)<<61) - 1, true));  // M61
+    testVec.push_back(std::make_pair(4611686014132420609ULL, false)); // M31^2
+    testVec.push_back(std::make_pair((1ULL << 63) +  0, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  1, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  2, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  3, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  4, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  5, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  6, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  7, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  8, false));
+    testVec.push_back(std::make_pair((1ULL << 63) +  9, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 10, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 11, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 12, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 13, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 14, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 15, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 16, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 17, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 18, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 19, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 20, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 21, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 22, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 23, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 24, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 25, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 26, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 27, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 28, false));
+    testVec.push_back(std::make_pair((1ULL << 63) + 29, true));
+
+    testVec.push_back(std::make_pair(uint64(-1)-58, true));
     testVec.push_back(std::make_pair(uint64(-1)-32, false));
     testVec.push_back(std::make_pair(uint64(-1)-2, false));
     testVec.push_back(std::make_pair(uint64(-1), false));
+
     return testVec;
 }
 
