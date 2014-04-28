@@ -82,7 +82,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <MASM Include="..\..\src\arith.asm" />
-    <MASM Include="..\..\src\lucas.asm" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cpp" />
