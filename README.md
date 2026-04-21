@@ -1,15 +1,15 @@
 # A primality test written in assembly x64
 
 This is an implementation of the Baille-PSW primality test in x86_64 assembly.
-It was written for fun, there is no associated claim regarding the performance.
+It was written for fun, there is no associated claim regarding the performance.<br>
 I put it here in case someone finds it useful.
 I wrote this back in 2014. It still compiles and runs in 2026 without any
 modification to the core algorithm (only added a `-c` flag for benchmarking).
 
 ## Building the code
 
-**Platform support:** Windows only (MinGW-w64). Visual Studio is not supported.
-To build the code source msys2 is needed, the installer can be downloaded from [msys2.org](https://www.msys2.org/).
+**Platform support:** Windows only (MinGW-w64). Visual Studio is not supported.<br>
+To build the code source msys2 is needed, the installer can be downloaded from [msys2.org](https://www.msys2.org/).<br>
 Once msys2 is installed run MINGW64, install the needed packages:
 ```bash
 $ pacman -S mingw-w64-x86_64-gcc
@@ -86,10 +86,10 @@ Primes: 5
 This section was added solely in order to give an idea of the kind of performance one can expect from the test.
 
 ### Environment
-**Processor:**	Intel(R) Core(TM) Ultra 7 155H, 1400 Mhz, (16 cores, 22 threads)
-**RAM:** 64.0 GB
-**OS:** Microsoft Windows 11 Pro
-**Compiler:** gcc (Rev13, Built by MSYS2 project) 15.2.0 (mingw-w64)
+**Processor:**	Intel(R) Core(TM) Ultra 7 155H, 1400 Mhz, (16 cores, 22 threads)<br>
+**RAM:** 64.0 GB<br>
+**OS:** Microsoft Windows 11 Pro<br>
+**Compiler:** gcc (Rev13, Built by MSYS2 project) 15.2.0 (mingw-w64)<br>
 **Assembler:** nasm version 3.01
 
 
