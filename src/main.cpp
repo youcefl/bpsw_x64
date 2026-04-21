@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
+#include <chrono>
 
 
 
@@ -471,10 +472,12 @@ int main(int argc, char** argv)
             run_is_prime_tests(build_is_prime_tests(), std::cout);
         }
     } else {
-        auto hasStart = false, hasLength = false, hasLimit = false;
+        auto hasStart = false, hasLength = false, hasLimit = false, isCountMode = false;
         uint64 start, length, limit;
         for(auto pargv = argv + 1; *pargv; ++pargv) {
-            if( ! strcmp(*pargv, "-s") ) {
+            if( ! strcmp(*pargv, "-c") ) {
+                isCountMode = true;
+            } else if( ! strcmp(*pargv, "-s") ) {
                 if( *(pargv + 1) ) {
                     hasStart = true;
                     start =  _strtoui64(*(pargv + 1), nullptr, 10);
@@ -500,15 +503,39 @@ int main(int argc, char** argv)
                 }
             }
         }
+        if( !(hasStart && hasLength) && !hasLimit ) {
+            std::cerr << "Invalid command line" << std::endl;
+            return 1;
+        }
+        if( isCountMode ) {
+            auto n0 = (hasStart && hasLength) ? start : 0ull;
+            auto n1 = (hasStart && hasLength) ? start + length : limit;
+            auto count = 0ull;
+            auto startTime = std::chrono::high_resolution_clock::now();
+            for(auto n = n0; n < n1; ++n) {
+                if( is_prime(n) ) {
+                    ++count;
+                }
+            }
+            std::cout << "Seconds: " << 
+                std::chrono::duration<double>(std::chrono::high_resolution_clock::now() 
+                        - startTime).count() << '\n'
+                      << "Primes: " << count << std::endl;
+            return 0;
+        }
         if( hasStart && hasLength ) {
             for(auto n = start; n < start + length; ++n) {
                 if( is_prime(n) ) {
                     std::cout << n << "\n";
                 }
             }
-        } else if( hasLimit ) {
+            return 0;
+        }
+        if( hasLimit ) {
             print_primes_below(limit, std::cout);
+            return 0;
         }
     }
+    return 1;
 }
 
